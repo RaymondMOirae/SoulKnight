@@ -11,14 +11,12 @@ public class PlayerController : MonoBehaviour
     // charactor property values
     [SerializeField]
     private float moveSpeed;
-    public bool knifeFight;
 
     // charactor components
     private Animator pAnimator;
     public WeaponManager wManager;
     public Weapon curWeapon;
 
-    public float NextFire;
     
 
     // Start is called before the first frame update
@@ -32,7 +30,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleInput();
-        curWeapon.RotateToAimCursor();
     }
 
     void HandleInput()
@@ -43,20 +40,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             curWeapon.Attack();
+            pAnimator.Play("KnifeAttack");
+        }
+        else if(Input.GetMouseButtonDown(1))
+        {
+            wManager.SwitchWeapon();
         }
         else
         {
-            ReturnIdle();
+            pAnimator.SetBool("pressMouseL", false);
         }
-    }
-
-    void ReturnIdle()
-    {
-        pAnimator.SetBool("pressMouseL", false);
-    }
-
-    void KnifeFight()
-    {
-        pAnimator.SetBool("pressMouseL", true);
     }
 }

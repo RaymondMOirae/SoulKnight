@@ -10,6 +10,11 @@ public class Enemy : MonoBehaviour
     // enemy propeties
     public int life;
 
+    private void Start()
+    {
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
@@ -33,7 +38,14 @@ public class Enemy : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+        }else if (collision.gameObject.CompareTag("Knife"))
+        {
+            life -= player.curWeapon.Damage;
+            if(life <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
-        Debug.Log("Trigger!");
+
     }
 }
