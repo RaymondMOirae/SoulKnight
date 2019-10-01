@@ -14,23 +14,32 @@ public class Weapon : MonoBehaviour
     // instance refrence
     public GameObject Bullet;
 
+    // temporary values
     private float NextFire;
+    private float spriteWidth;
 
-
+    private void Start()
+    {
+        // calculate bullet spawn position offset from sprite pivot
+        Sprite gunSprite = GetComponent<SpriteRenderer>().sprite;
+        spriteWidth = gunSprite.bounds.size.x * transform.localScale.x;
+    }
     public void Attack()
     {
         NextFire += Time.fixedDeltaTime;
 
         if (NextFire > FireRate)
         {
-            // calculate shooting direction
-            Vector3 mousePos= Input.mousePosition;
-            Vector3 screenPos = new Vector3(mousePos.x - Camera.main.pixelWidth / 2, mousePos.y - Camera.main.pixelHeight / 2, 0);
-            Vector3 offset = new Vector3(transform.position.x - Camera.main.transform.position.x, transform.position.y - Camera.main.transform.position.y, 0);
+            // calculate bullet position and rotation
+            Vector3 shootDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            Quaternion bulletRotation = transform.rotation * Quaternion.Euler(0.0f, 0.0f, 90.0f);
+            Vector3 spawnPos = transform.position + transform.right * spriteWidth * 0.75f;
+
             // spawn bullet and add velocity
-            GameObject bullet = Instantiate(Bullet, transform.position, Quaternion.identity);
-            bullet.GetComponent<Rigidbody2D>().velocity = (screenPos + transform.position + offset).normalized * BulletSpeed;
+            GameObject bullet = Instantiate(Bullet, spawnPos, bulletRotation);
+            bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * BulletSpeed;
             Debug.Log(bullet.GetComponent<Rigidbody2D>().velocity);
+
             // store the bullet in a parent object 
             bullet.transform.SetParent(GameObject.Find("Bullets").transform);
 
@@ -39,8 +48,9 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void AimCursor()
+    public void RotateToAimCursor()
     {
-
+        Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        transform.right = new Vector3(direction.x, direction.y, 0);
     }
 }

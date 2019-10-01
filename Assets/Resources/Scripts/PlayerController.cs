@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleInput();
+        curWeapon.RotateToAimCursor();
     }
 
     void HandleInput()
