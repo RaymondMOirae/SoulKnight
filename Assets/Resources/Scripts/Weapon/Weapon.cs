@@ -38,7 +38,6 @@ public class Weapon : MonoBehaviour
             // spawn bullet and add velocity
             GameObject bullet = Instantiate(Bullet, spawnPos, bulletRotation);
             bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * BulletSpeed;
-            Debug.Log(bullet.GetComponent<Rigidbody2D>().velocity);
 
             // store the bullet in a parent object 
             bullet.transform.SetParent(GameObject.Find("Bullets").transform);
