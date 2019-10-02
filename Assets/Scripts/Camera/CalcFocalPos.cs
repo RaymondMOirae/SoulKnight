@@ -21,20 +21,18 @@ public class CalcFocalPos : MonoBehaviour
     void Update()
     {
         //Gizmos.DrawWireSphere(transform.position, searchRadius);
-        Collider2D[] nearUnits = SearchNearUnits();
+        Collider2D[] nearUnits = Physics2D.OverlapCircleAll(transform.position, searchRadius);
         Vector3 meanPos = player.transform.position;
-        foreach(Collider2D unit in nearUnits)
+        foreach (Collider2D unit in nearUnits)
         {
-            meanPos += unit.transform.position * enemyWeight;
+            if (!unit.transform.CompareTag("Tilemap"))
+            {
+                meanPos += unit.transform.position * enemyWeight;
+            }
         }
         meanPos = meanPos / (nearUnits.Length * enemyWeight + 1);
 
         transform.position = CamPosSlerp((start, end) => Mathf.Lerp(start, end, followSpeed))(transform.position, meanPos);
-    }
-
-    Collider2D[] SearchNearUnits()
-    {
-        return Physics2D.OverlapCircleAll(transform.position, searchRadius);
     }
 
     Func<Vector3, Vector3, Vector3> CamPosSlerp(Func<float, float, float > CoordsLerp)
