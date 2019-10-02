@@ -40,7 +40,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             curWeapon.Attack();
-            pAnimator.Play("KnifeAttack");
+            if (curWeapon.isKnife)
+            {
+                pAnimator.Play("KnifeAttack");
+            }
+
         }
         else if(Input.GetMouseButtonDown(1))
         {

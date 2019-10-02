@@ -16,7 +16,6 @@ public class WeaponManager : MonoBehaviour
 
         player.curWeapon = Instantiate(equippedWeapon[0], player.transform.GetChild(1).transform.position, Quaternion.identity);
         player.curWeapon.transform.SetParent(player.transform.GetChild(1));
-        Debug.Log("Init weapon");
     }
     public void SwitchWeapon()
     {
@@ -25,7 +24,6 @@ public class WeaponManager : MonoBehaviour
             Destroy(GameObject.FindGameObjectWithTag("Weapon"));
             player.curWeapon = Instantiate(equippedWeapon[1], player.transform.GetChild(1).transform.position, Quaternion.identity);
             player.curWeapon.transform.SetParent(player.transform.GetChild(1));
-            Debug.Log("Should shift to knife");
             curIndex = 1;
         }
         else
@@ -33,7 +31,6 @@ public class WeaponManager : MonoBehaviour
             Destroy(GameObject.FindGameObjectWithTag("Knife"));
             player.curWeapon = Instantiate(equippedWeapon[0], player.transform.GetChild(1).transform.position, Quaternion.identity);
             player.curWeapon.transform.SetParent(player.transform.GetChild(1));
-            Debug.Log("Should shift to gun");
             curIndex = 0;
         } 
     }
