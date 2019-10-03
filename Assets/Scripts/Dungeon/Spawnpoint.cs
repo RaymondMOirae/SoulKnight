@@ -12,10 +12,12 @@ public class Spawnpoint : MonoBehaviour
 
     private RoomTempProvider templates;
     private int rand;
-    private bool isSpawned = false;
+    public bool isSpawned = false;
+    private float waitTime = 3.0f;
 
     private void Start()
     {
+        Destroy(gameObject, waitTime);
         templates = GameObject.FindGameObjectWithTag("RoomTemps").GetComponent<RoomTempProvider>();
         Invoke("Spawn", 0.1f);
     }
@@ -28,25 +30,23 @@ public class Spawnpoint : MonoBehaviour
                 case 1:
                     // spawn room with bottom opening
                     rand = Random.Range(0, templates.RoomWithBottom.Length);
-                    Instantiate(templates.RoomWithBottom[rand], transform);
+                    Instantiate(templates.RoomWithBottom[rand], transform.position, Quaternion.identity);
                     break;
                 case 2:
                     // spawn room with left opening
                     rand = Random.Range(0, templates.RoomWithLeft.Length);
-                    Instantiate(templates.RoomWithLeft[rand], transform);
+                    Instantiate(templates.RoomWithLeft[rand], transform.position, Quaternion.identity);
                     break;
                 case 3:
                     // spawn room with top opening
                     rand = Random.Range(0, templates.RoomWithTop.Length);
-                    Instantiate(templates.RoomWithTop[rand], transform);
+                    Instantiate(templates.RoomWithTop[rand], transform.position, Quaternion.identity);
                     break;
                 case 4:
                     // spawn room with right opening
                     rand = Random.Range(0, templates.RoomWithRight.Length);
-                    Instantiate(templates.RoomWithRight[rand], transform);
+                    Instantiate(templates.RoomWithRight[rand], transform.position, Quaternion.identity);
                     break;
-                default:
-                    return;
             }
         }
         isSpawned = true;
@@ -56,8 +56,9 @@ public class Spawnpoint : MonoBehaviour
     {
         if(collision.CompareTag("SpawnPoint"))
         {
-            if(collision.GetComponent<Spawnpoint>().isSpawned == false && isSpawned == false)
+            if(collision.GetComponent<Spawnpoint>().isSpawned == true && isSpawned == false)
             {
+                Instantiate(templates.DoorSealer, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
             isSpawned = true;

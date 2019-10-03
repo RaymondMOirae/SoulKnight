@@ -11,6 +11,7 @@ public class CalcFocalPos : MonoBehaviour
     private float enemyWeight;
     public GameObject player;
     public float followSpeed;
+    private int calcUnits;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,16 +23,18 @@ public class CalcFocalPos : MonoBehaviour
     {
         //Gizmos.DrawWireSphere(transform.position, searchRadius);
         Collider2D[] nearUnits = Physics2D.OverlapCircleAll(transform.position, searchRadius);
-        Vector3 meanPos = player.transform.position;
+        Vector3 meanPos = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         foreach (Collider2D unit in nearUnits)
         {
-            if (!unit.transform.CompareTag("Tilemap"))
+            if (!unit.transform.CompareTag("Tilemap") && !unit.transform.CompareTag("SpawnPoint"))
             {
-                meanPos += unit.transform.position * enemyWeight;
+                calcUnits += 1;
+                meanPos += new Vector3(unit.transform.position.x, unit.transform.position.y, -10) * enemyWeight;
             }
         }
-        meanPos = meanPos / (nearUnits.Length * enemyWeight + 1);
-
+        meanPos = meanPos / (calcUnits * enemyWeight + 1);
+        Debug.Log(calcUnits);
+        calcUnits = 0;  
         transform.position = CamPosSlerp((start, end) => Mathf.Lerp(start, end, followSpeed))(transform.position, meanPos);
     }
 

@@ -8,5 +8,6 @@ public class RoomTempProvider: MonoBehaviour
     public GameObject[] RoomWithLeft;
     public GameObject[] RoomWithTop;
     public GameObject[] RoomWithRight;
+    public GameObject DoorSealer;
     
 }
