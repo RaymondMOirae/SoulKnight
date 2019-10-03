@@ -48,17 +48,18 @@ public class Spawnpoint : MonoBehaviour
                     Instantiate(templates.RoomWithRight[rand], transform.position, Quaternion.identity);
                     break;
             }
+            isSpawned = true;
         }
-        isSpawned = true;
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("SpawnPoint"))
         {
-            if(collision.GetComponent<Spawnpoint>().isSpawned == true && isSpawned == false)
+            if (collision.GetComponent<Spawnpoint>().isSpawned == false && isSpawned == false)
             {
-                Instantiate(templates.DoorSealer, transform.position, Quaternion.identity);
+                Instantiate(templates.DoorSealer, collision.gameObject.transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
             isSpawned = true;
