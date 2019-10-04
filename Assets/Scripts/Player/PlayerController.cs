@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     // charactor property values
     [SerializeField]
     private float moveSpeed;
+    public int goldNum;
 
     // charactor components
     private Animator pAnimator;

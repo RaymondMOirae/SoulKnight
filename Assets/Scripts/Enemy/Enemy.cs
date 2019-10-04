@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     // enemy propeties
     private Animator eAnimator;
+    public LayoutSpawner layout;
 
     public float thinkInterval;
     private State curState;
@@ -112,6 +113,7 @@ public class Enemy : MonoBehaviour
             Destroy(collision.gameObject);
             if (life <= 0)
             {
+                layout.enemies.Remove(this);
                 Destroy(gameObject);
             }
         }else if (collision.gameObject.CompareTag("Knife"))
@@ -119,6 +121,7 @@ public class Enemy : MonoBehaviour
             life -= player.curWeapon.Damage;
             if(life <= 0)
             {
+                layout.enemies.Remove(this);
                 Destroy(gameObject);
             }
         }
