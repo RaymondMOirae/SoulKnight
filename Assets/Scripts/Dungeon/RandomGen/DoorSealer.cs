@@ -6,8 +6,6 @@ public class DoorSealer : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        Debug.Log("Destroy! T Enter");
         if (collision.gameObject.CompareTag("DoorSealer"))
         {
             Destroy(collision.gameObject);

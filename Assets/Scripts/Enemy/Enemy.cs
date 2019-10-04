@@ -61,25 +61,20 @@ public class Enemy : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(thinkInterval);
-            Debug.Log("MakeDecision Once!");
             Vector3 distance = player.transform.position - transform.position;
             if (distance.magnitude < attackDistance)
             {
                 curState = State.Attack;
-                Debug.Log("Attack!");
             }
             else if (distance.magnitude < senseDistance)
             {
                 eAnimator.SetBool("isAttack", false);
                 curState = State.Chase;
-                Debug.Log("Chase!");
             }
             else
             {
-
                 eAnimator.SetBool("isAttack", false);
                 curState = State.Wander;
-                Debug.Log("Wander!");
             }
         }
     }

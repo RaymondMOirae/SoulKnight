@@ -26,14 +26,13 @@ public class CalcFocalPos : MonoBehaviour
         Vector3 meanPos = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         foreach (Collider2D unit in nearUnits)
         {
-            if (!unit.transform.CompareTag("Tilemap") && !unit.transform.CompareTag("SpawnPoint"))
+            if (unit.transform.CompareTag("Enemy"))
             {
                 calcUnits += 1;
                 meanPos += new Vector3(unit.transform.position.x, unit.transform.position.y, -10) * enemyWeight;
             }
         }
         meanPos = meanPos / (calcUnits * enemyWeight + 1);
-        Debug.Log(calcUnits);
         calcUnits = 0;  
         transform.position = CamPosSlerp((start, end) => Mathf.Lerp(start, end, followSpeed))(transform.position, meanPos);
     }
