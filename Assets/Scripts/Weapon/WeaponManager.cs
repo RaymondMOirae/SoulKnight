@@ -6,7 +6,7 @@ public class WeaponManager : MonoBehaviour
 {
     public List<Weapon> weaponList = new List<Weapon>();
     public List<Weapon> equippedWeapon = new List<Weapon>();
-    private int curIndex = 0;
+    private int curIndex = 1;
     public PlayerController player;
     public GameObject weaponHolder;
 
@@ -15,24 +15,28 @@ public class WeaponManager : MonoBehaviour
         equippedWeapon[0] = weaponList[0];
         equippedWeapon[1] = weaponList[1];
         weaponHolder = GameObject.Find("WeaponHolder");
-        player.curWeapon = Instantiate(equippedWeapon[0], weaponHolder.transform.position, Quaternion.identity);
-        player.curWeapon.transform.SetParent(weaponHolder.transform);
+        SwitchWeapon();
+        
     }
     public void SwitchWeapon()
     {
-        if(curIndex == 0)
+        curIndex = (curIndex + 1) % 2;
+        if (player.curWeapon)
         {
-            Destroy(GameObject.FindGameObjectWithTag("Weapon"));
-            player.curWeapon = Instantiate(equippedWeapon[1], weaponHolder.transform.position, Quaternion.identity);
-            player.curWeapon.transform.SetParent(player.transform.GetChild(1));
-            curIndex = 1;
+            Destroy(GameObject.Find(player.curWeapon.name));
         }
-        else
-        {
-            Destroy(GameObject.FindGameObjectWithTag("Knife"));
-            player.curWeapon = Instantiate(equippedWeapon[0], weaponHolder.transform.position, Quaternion.identity);
-            player.curWeapon.transform.SetParent(player.transform.GetChild(1));
-            curIndex = 0;
-        } 
+        player.curWeapon = Instantiate(equippedWeapon[curIndex], weaponHolder.transform.position, Quaternion.identity, weaponHolder.transform);
+        player.curWeapon.isKept = true;
+        player.curWeapon.GetComponent<BoxCollider2D>().enabled = false;
     }
+
+    public void AddWeapon(Weapon weapon)
+    {
+        // add weapon to equipped weapon list
+        equippedWeapon[curIndex] = weaponList[weapon.id];
+        curIndex = (curIndex + 1) % 2;
+
+        SwitchWeapon();
+    }
+
 }

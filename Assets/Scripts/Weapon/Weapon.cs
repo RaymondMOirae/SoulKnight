@@ -10,6 +10,8 @@ public class Weapon : MonoBehaviour
     public string Name;
     public float FireRate;
     public int Damage;
+    public bool isKept;
+    public int id;
 
     // Gun Propeties
     public float BulletSpeed;
@@ -23,6 +25,7 @@ public class Weapon : MonoBehaviour
 
     // instance refrence
     public GameObject Bullet;
+    public WeaponManager wManager;
 
     // temporary values
     private float NextFire;
@@ -30,6 +33,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
+        wManager = GameObject.Find("WeaponManager").GetComponent<WeaponManager>();
         if (!isKnife)
         {
             // calculate bullet spawn position offset from sprite pivot
@@ -40,13 +44,16 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (isAttack)
+        if (isKept)
         {
-            timer += Time.deltaTime * 2;
-            transform.Rotate(0.0f, 0.0f, curve.Evaluate(timer/AttackTime) * Amplitude);
-        }else
-        {
-            RotateToAimCursor();
+            if (isAttack)
+            {
+                timer += Time.deltaTime * 2;
+                transform.Rotate(0.0f, 0.0f, curve.Evaluate(timer/AttackTime) * Amplitude);
+            }else
+            {
+                RotateToAimCursor();
+            }
         }
     }
 
@@ -105,5 +112,14 @@ public class Weapon : MonoBehaviour
     {
         Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         transform.right = new Vector3(direction.x, direction.y, 0);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            wManager.AddWeapon(this);
+            Destroy(gameObject);
+        }
     }
 }
