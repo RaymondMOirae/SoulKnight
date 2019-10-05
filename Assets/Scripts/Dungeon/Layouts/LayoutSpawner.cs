@@ -22,7 +22,7 @@ public class LayoutSpawner: MonoBehaviour
     {
         if (enemies.Count == 0 && !caseSpawned)
         {
-            Instantiate(layoutTemps.BonusCase, new Vector3(-3, -3, 0) + transform.parent.transform.position, Quaternion.identity, transform);
+            Instantiate(layoutTemps.smallBonusCase, new Vector3(-3, -3, 0) + transform.parent.transform.position, Quaternion.identity, transform);
             Destroy(Door);
             caseSpawned = true;
         }
