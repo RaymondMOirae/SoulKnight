@@ -49,8 +49,9 @@ public class Weapon : MonoBehaviour
             if (isAttack)
             {
                 timer += Time.deltaTime * 2;
-                transform.Rotate(0.0f, 0.0f, curve.Evaluate(timer/AttackTime) * Amplitude);
-            }else
+                transform.Rotate(0.0f, 0.0f, curve.Evaluate(timer / AttackTime) * Amplitude);
+            }
+            else
             {
                 RotateToAimCursor();
             }

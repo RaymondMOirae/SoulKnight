@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
@@ -32,11 +33,20 @@ public class WeaponManager : MonoBehaviour
 
     public void AddWeapon(Weapon weapon)
     {
+        Weapon replace = Instantiate(player.curWeapon, weapon.transform.position, Quaternion.identity);
+        replace.isKept = false;
+        replace.GetComponent<BoxCollider2D>().enabled = true;
         // add weapon to equipped weapon list
         equippedWeapon[curIndex] = weaponList[weapon.id];
         curIndex = (curIndex + 1) % 2;
 
         SwitchWeapon();
+    }
+
+    public Weapon GetRandomWeapon()
+    {
+        int rand = Random.Range(2, weaponList.Count);
+        return weaponList[rand];
     }
 
 }

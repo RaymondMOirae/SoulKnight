@@ -23,8 +23,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pAnimator = GetComponent<Animator>();
-        
+        pAnimator = GetComponent<Animator>();        
     }
 
     // Update is called once per frame
@@ -54,6 +53,17 @@ public class PlayerController : MonoBehaviour
         else
         {
             pAnimator.SetBool("pressMouseL", false);
+        }
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if(mousePos.x >= transform.position.x)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+            curWeapon.transform.localScale = new Vector3(1, 1, 1) * 0.14f;
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+            curWeapon.transform.localScale = new Vector3(-1, -1, 1) * 0.14f;
         }
     }
 }
