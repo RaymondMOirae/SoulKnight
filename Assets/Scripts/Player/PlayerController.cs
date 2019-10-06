@@ -12,13 +12,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float moveSpeed;
     public int goldNum;
+    public int life;
 
     // charactor components
     private Animator pAnimator;
     public WeaponManager wManager;
-    public Weapon curWeapon;
-
-    
+    public Weapon curWeapon; 
 
     // Start is called before the first frame update
     void Start()
@@ -65,5 +64,16 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
             curWeapon.transform.localScale = new Vector3(-1, -1, 1) * 0.14f;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("EnemyBullet"))
+        {
+            life -= 2;
+        }
+
+
+
     }
 }

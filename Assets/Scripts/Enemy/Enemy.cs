@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private Animator eAnimator;
     public LayoutSpawner layout;
     public GameObject bullet;
+    public bool isShooter;
 
     public float thinkInterval;
 
@@ -18,6 +19,9 @@ public class Enemy : MonoBehaviour
     public int Damage;
 
     public float moveSpeed;
+
+    public float walkSpeed;
+    public float chargeSpeed;
     public float bulletSpeed;
 
     public float attackDistance;
@@ -35,7 +39,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        Excecute();
+        ExcecuteMovement();
     }
 
     IEnumerator MakeDecision()
@@ -48,8 +52,17 @@ public class Enemy : MonoBehaviour
             if (distance.magnitude < attackDistance)
             {
                 eAnimator.SetBool("isAttack", true);
-                moveDirection = GetRandomDirection();
-                StartCoroutine("DoShot");
+                if (isShooter)
+                {
+                    Debug.Log("Should shoot");
+                    StartCoroutine("Shoot");
+                }
+                else
+                {
+                    moveDirection = GetPlayerDirection();
+                    moveSpeed = chargeSpeed;
+                    StartCoroutine("Charge");
+                }
             }
             else if(distance.magnitude < senseDistance)
             {
@@ -63,18 +76,24 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-
-    IEnumerable DoShot()
-    {
-        yield return new WaitForSeconds(3);
-        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
-        newBullet.transform.forward = player.transform.position - transform.position;
-        newBullet.GetComponent<Rigidbody2D>().velocity =(player.transform.position - transform.position).normalized * bulletSpeed;
-    }
-
-    void Excecute()
+    void ExcecuteMovement()
     {
         transform.Translate(moveDirection * Time.deltaTime * moveSpeed);
+    }
+    IEnumerator Shoot()
+    {
+        yield return new WaitForSeconds(1);
+        Debug.Log("Should Spawn Bullet");
+        GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
+        newBullet.transform.up= player.transform.position - transform.position;
+        newBullet.GetComponent<Rigidbody2D>().velocity =(player.transform.position - transform.position).normalized * bulletSpeed;
+        Debug.Log(newBullet);
+    }
+
+    IEnumerator Charge()
+    {
+        yield return new WaitForSeconds(1.5f);
+        moveSpeed = walkSpeed;
     }
 
     Vector3 GetRandomDirection()
@@ -84,10 +103,15 @@ public class Enemy : MonoBehaviour
         return destination;
     }
 
+    Vector3 GetPlayerDirection()
+    {
+        return (player.transform.position - transform.position).normalized;
+    }
+
     // handle damage from player
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (collision.CompareTag("Bullet"))
         {
             life -= player.curWeapon.Damage;
             Destroy(collision.gameObject);
@@ -96,14 +120,23 @@ public class Enemy : MonoBehaviour
                 layout.enemies.Remove(this);
                 Destroy(gameObject);
             }
-        }else if (collision.gameObject.CompareTag("Knife"))
+        }
+        else if (collision.CompareTag("Knife"))
         {
             life -= player.curWeapon.Damage;
-            if(life <= 0)
+            if (life <= 0)
             {
                 layout.enemies.Remove(this);
                 Destroy(gameObject);
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    { 
+        if (collision.gameObject.CompareTag("Player") && !isShooter)
+        {
+            player.life -= Damage;
         }
     }
 
