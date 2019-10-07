@@ -17,7 +17,7 @@ public class RoomTempProvider: MonoBehaviour
 
     public bool spawnedSpecial = false;
 
-    public float specialRoomTimer = 4;
+    public float specialRoomTimer = 0.5f;
 
     private void Update()
     {

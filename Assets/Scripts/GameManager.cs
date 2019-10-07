@@ -7,6 +7,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     private PlayerController player;
+    private AudioListener main;
 
     // UI references
     public GameObject ScoreBoard;
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     // temporary variables
     private bool terminaterd;
+    private bool canRestart;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
         lifeText.text = "Life:" + player.life;
         goldText.text = "Gold:" + player.goldNum;
         if (player.life <= 0)
@@ -39,13 +41,19 @@ public class GameManager : MonoBehaviour
             gameOverText.text = "YOU DIED WITH " + player.goldNum + " G";
             terminaterd = true;
         }
-        if(terminaterd && Input.GetMouseButton(0))
+        if (terminaterd && Input.GetMouseButton(0) && canRestart)
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
             Debug.Log("Restart Game");
             terminaterd = false;
         }
-        
+
+    }
+
+    IEnumerator WaitToRestart()
+    {
+        yield return new WaitForSeconds(3);
+        canRestart = true; 
     }
 }

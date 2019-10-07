@@ -6,6 +6,7 @@ public class BigBonusCase : MonoBehaviour
 {
     public WeaponManager wManager;
     public bool opened;
+    public AudioClip openSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +21,9 @@ public class BigBonusCase : MonoBehaviour
             Vector2 randomPoint = Random.insideUnitCircle.normalized;
             Vector3 randomPos = new Vector3(randomPoint.x, randomPoint.y, 0.0f);
 
-            // choose a random gun from weapon prefabs
+            // choose a random gun from weapon prefabs and instantiate
             Weapon randWeapon = Instantiate(wManager.GetRandomWeapon(), transform.position + randomPos, Quaternion.identity);
+            SoundManager.theSoundManager.PlayClip(openSound);
             opened = true;
         }
     }

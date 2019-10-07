@@ -11,9 +11,14 @@ public class Enemy : MonoBehaviour
     private Animator eAnimator;
     public LayoutSpawner layout;
     public GameObject bullet;
-    public bool isShooter;
+
+    public AudioClip dieSound;
+    public AudioClip attackSound;
+
 
     public float thinkInterval;
+    public bool isShooter;
+    public bool isBoss;
 
     public int life;
     public int Damage;
@@ -52,12 +57,11 @@ public class Enemy : MonoBehaviour
             if (distance.magnitude < attackDistance)
             {
                 eAnimator.SetBool("isAttack", true);
-                if (isShooter)
+                if (isShooter || isBoss)
                 {
-                    Debug.Log("Should shoot");
                     StartCoroutine("Shoot");
                 }
-                else
+                if(!isShooter)
                 {
                     moveDirection = GetPlayerDirection();
                     moveSpeed = chargeSpeed;
@@ -83,6 +87,7 @@ public class Enemy : MonoBehaviour
     IEnumerator Shoot()
     {
         yield return new WaitForSeconds(1);
+        SoundManager.theSoundManager.PlayClip(attackSound);
         GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
         newBullet.transform.up= player.transform.position - transform.position;
         newBullet.GetComponent<Rigidbody2D>().velocity =(player.transform.position - transform.position).normalized * bulletSpeed;
@@ -90,6 +95,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Charge()
     {
+        SoundManager.theSoundManager.PlayClip(attackSound);
         yield return new WaitForSeconds(1.5f);
         moveSpeed = walkSpeed;
     }
@@ -117,6 +123,7 @@ public class Enemy : MonoBehaviour
             {
                 layout.enemies.Remove(this);
                 Destroy(gameObject);
+                SoundManager.theSoundManager.PlayClip(dieSound);
             }
         }
         else if (collision.CompareTag("Knife"))
@@ -126,6 +133,7 @@ public class Enemy : MonoBehaviour
             {
                 layout.enemies.Remove(this);
                 Destroy(gameObject);
+                SoundManager.theSoundManager.PlayClip(dieSound);
             }
         }
     }
