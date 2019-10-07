@@ -1,23 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    // input parameters
-    private float inputH;
-    private float inputV;
-
-    // charactor property values
+    // character property values
     [SerializeField]
     private float moveSpeed;
     public int goldNum;
     public int life;
 
-    // charactor components
+    // character components
     private Animator pAnimator;
     public WeaponManager wManager;
-    public Weapon curWeapon; 
+    public Weapon curWeapon;
+
+    // input parameters
+    private float inputH;
+    private float inputV;
 
     // Start is called before the first frame update
     void Start()
@@ -72,8 +73,5 @@ public class PlayerController : MonoBehaviour
         {
             life -= 2;
         }
-
-
-
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // instance refrence
+    // instance reference
     private PlayerController player;
 
-    // enemy propeties
+    // enemy properties
     private Animator eAnimator;
     public LayoutSpawner layout;
     public GameObject bullet;
@@ -83,11 +83,9 @@ public class Enemy : MonoBehaviour
     IEnumerator Shoot()
     {
         yield return new WaitForSeconds(1);
-        Debug.Log("Should Spawn Bullet");
         GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
         newBullet.transform.up= player.transform.position - transform.position;
         newBullet.GetComponent<Rigidbody2D>().velocity =(player.transform.position - transform.position).normalized * bulletSpeed;
-        Debug.Log(newBullet);
     }
 
     IEnumerator Charge()

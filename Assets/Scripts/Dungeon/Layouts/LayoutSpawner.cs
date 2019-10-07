@@ -26,7 +26,7 @@ public class LayoutSpawner: MonoBehaviour
             Destroy(Door);
             caseSpawned = true;
         }
-        if (!spawnDoorOnce && (player.transform.position - transform.position).magnitude <= 4.4f)
+        if (!spawnDoorOnce && (player.transform.position - transform.position).magnitude <= 4.6f)
         {
             Door.SetActive(true);
             spawnDoorOnce = true;
